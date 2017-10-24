@@ -85,6 +85,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
           let text_to_speech = '<speak>'
           + '<p>' + snapshot_title.val() + '</p>'
           + '<p>' + snapshot_summary.val() + '</p>'
+          + '<p>' + 'Do you have an opinion an that or do you need more details?' + '</p>'
           + '</speak>'
           sendGoogleResponse(text_to_speech);
         });

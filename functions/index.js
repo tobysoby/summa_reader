@@ -40,6 +40,9 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   const requestSource = (request.body.originalRequest) ? request.body.originalRequest.source : undefined;
   const app = new DialogflowApp({request: request, response: response});
 
+  const userId = app.getUser().userId;
+  console.log("UserId: " + userId);
+
   // Create handlers for Dialogflow actions as well as a 'default' handler
   const actionHandlers = {
     // The default welcome intent has been matched, welcome the user (https://dialogflow.com/docs/events#default_welcome_intent)

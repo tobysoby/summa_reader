@@ -98,7 +98,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
     'input.2-Yes': () => {
       // Get the most interesting topic from firebase
-      var ref = db.ref("default_values/strings/2-Yes");
+      var ref = db.ref("default_values/strings/2-Yes/");
       ref.once("value", function(snapshot) {
         console.log('input.2-Yes' + snapshot.val());
       });
@@ -110,7 +110,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     },
     'input.2-No': () => {
       // Get the most interesting topic from firebase
-      var ref = db.ref("default_values/strings/2-No");
+      var ref = db.ref("default_values/strings/2-No/");
       ref.once("value", function(snapshot) {
         console.log(snapshot.val());
       });

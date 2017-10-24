@@ -77,15 +77,18 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     // 1
     'input.1': () => {
       // Get the most interesting topic from firebase
-      var ref = db.ref("text");
-      ref.once("value", function(snapshot) {
-        console.log(snapshot.val());
+      var ref_storyline_title = db.ref("storylines_test/1/title/");
+      var ref_storyline_summary = db.ref("storylines_test/1/summary/");
+      ref_storyline_title.once("value", function(snapshot_title) {
+        ref_storyline_summary.once("value", function(snapshot_summary) {
+          console.log(snapshot_title.val() + snapshot_summary.val());
+          let text_to_speech = '<speak>'
+          + '<p>' + snapshot_title.val() + '</p>'
+          + '<p>' + snapshot_summary.val() + '</p>'
+          + '</speak>'
+          sendGoogleResponse(text_to_speech);
+        });
       });
-      if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse(output);
-      } else {
-        sendResponse('summa'); // Send simple response to user
-      }
     },
     // Default handler for unknown or undefined actions
     'default': () => {

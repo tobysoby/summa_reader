@@ -99,11 +99,11 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     'input.2-Yes': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("default_values/strings");
-      ref.once("2-Yes", function(snapshot) {
-        console.log(snapshot.val());
+      ref.once("value", function(snapshot) {
+        console.log('input.2-Yes' + snapshot.val());
       });
       if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse(output);
+        sendGoogleResponse('input.2-Yes');
       } else {
         sendResponse('summa'); // Send simple response to user
       }
@@ -111,7 +111,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     'input.2-No': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("default_values/strings");
-      ref.once("2-No", function(snapshot) {
+      ref.once("value", function(snapshot) {
         console.log(snapshot.val());
       });
       if (requestSource === googleAssistantRequest) {

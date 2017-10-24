@@ -11,13 +11,15 @@ const googleAssistantRequest = 'google'; // Constant to identify Google Assistan
 var admin = require("firebase-admin");
 
 // Fetch the service account key JSON file contents
-var serviceAccount = require("./sAK.json");
+var serviceAccount = require("./summa-reader-firebase-adminsdk-oeyor-6193814e15.json");
 
 // Initialize the app with a service account, granting admin privileges
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://summa-reader.firebaseio.com"
 });
+
+var db = admin.database();
 
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {
   console.log('Request headers: ' + JSON.stringify(request.headers));
@@ -67,7 +69,20 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     'input.summa': () => {
       // Use the Actions on Google lib to respond to Google requests; for other requests use JSON
       if (requestSource === googleAssistantRequest) {
-      	sendGoogleResponse(output);
+        sendGoogleResponse(output);
+      } else {
+        sendResponse('summa'); // Send simple response to user
+      }
+    },
+    // 1
+    'input.1': () => {
+      // Get the most interesting topic from firebase
+      var ref = db.ref("text");
+      ref.once("value", function(snapshot) {
+        console.log(snapshot.val());
+      });
+      if (requestSource === googleAssistantRequest) {
+        sendGoogleResponse(output);
       } else {
         sendResponse('summa'); // Send simple response to user
       }

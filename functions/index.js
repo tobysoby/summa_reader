@@ -87,6 +87,140 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         sendResponse('summa'); // Send simple response to user
       }
     },
+
+
+//MY -----------------------------------------------------------
+
+
+    'input.2-Yes': () => {
+      // Get the most interesting topic from firebase
+      var ref = db.ref("default_values/strings");
+      ref.once("2-Yes", function(snapshot) {
+        console.log(snapshot.val());
+      });
+      if (requestSource === googleAssistantRequest) {
+        sendGoogleResponse(output);
+      } else {
+        sendResponse('summa'); // Send simple response to user
+      }
+    },
+    'input.2-No': () => {
+      // Get the most interesting topic from firebase
+      var ref = db.ref("default_values/strings");
+      ref.once("2-No", function(snapshot) {
+        console.log(snapshot.val());
+      });
+      if (requestSource === googleAssistantRequest) {
+        sendGoogleResponse(output);
+      } else {
+        sendResponse('summa'); // Send simple response to user
+      }
+    },
+    'input.2-More_details': () => {
+      // Get the most interesting topic from firebase
+      var ref = db.ref("text");
+      ref.once("value", function(snapshot) {
+        console.log(snapshot.val());
+      });
+      if (requestSource === googleAssistantRequest) {
+        sendGoogleResponse(output);
+      } else {
+        sendResponse('summa'); // Send simple response to user
+      }
+    },
+    'input.3-Yes': () => {
+      // Get the most interesting topic from firebase
+      var ref = db.ref("text");
+      ref.once("value", function(snapshot) {
+        console.log(snapshot.val());
+      });
+      if (requestSource === googleAssistantRequest) {
+        sendGoogleResponse(output);
+      } else {
+        sendResponse('summa'); // Send simple response to user
+      }
+    },
+    'input.3-No': () => {
+      // Get the most interesting topic from firebase
+      var ref = db.ref("default_values/strings");
+      ref.once("3-No", function(snapshot) {
+        console.log(snapshot.val());
+      });
+      if (requestSource === googleAssistantRequest) {
+        sendGoogleResponse(output);
+      } else {
+        sendResponse('summa'); // Send simple response to user
+      }
+    },
+    'input.4-Yes': () => {
+      // Get the most interesting topic from firebase
+      var ref = db.ref("text");
+      ref.once("value", function(snapshot) {
+        console.log(snapshot.val());
+      });
+      if (requestSource === googleAssistantRequest) {
+        sendGoogleResponse(output);
+      } else {
+        sendResponse('summa'); // Send simple response to user
+      }
+    },
+    'input.4-No': () => {
+      // Get the most interesting topic from firebase
+      var ref = db.ref("text");
+      ref.once("value", function(snapshot) {
+        console.log(snapshot.val());
+      });
+      if (requestSource === googleAssistantRequest) {
+        sendGoogleResponse(output);
+      } else {
+        sendResponse('summa'); // Send simple response to user
+      }
+    },
+    'input.5-discuss': () => {
+      // Get the most interesting topic from firebase
+      var ref = db.ref("text");
+      ref.once("value", function(snapshot) {
+        console.log(snapshot.val());
+      });
+      if (requestSource === googleAssistantRequest) {
+        sendGoogleResponse(output);
+      } else {
+        sendResponse('summa'); // Send simple response to user
+      }
+    },
+    'input.6-Yes': () => {
+      // Get the most interesting topic from firebase
+      var ref = db.ref("text");
+      ref.once("value", function(snapshot) {
+        console.log(snapshot.val());
+      });
+      if (requestSource === googleAssistantRequest) {
+        sendGoogleResponse(output);
+      } else {
+        sendResponse('summa'); // Send simple response to user
+      }
+    },
+    'input.6-No': () => {
+      // Get the most interesting topic from firebase
+      var ref = db.ref("text");
+      ref.once("value", function(snapshot) {
+        console.log(snapshot.val());
+      });
+      if (requestSource === googleAssistantRequest) {
+        sendGoogleResponse(output);
+      } else {
+        sendResponse('summa'); // Send simple response to user
+      }
+    },
+
+
+
+
+
+
+
+
+
     // Default handler for unknown or undefined actions
     'default': () => {
       // Use the Actions on Google lib to respond to Google requests; for other requests use JSON

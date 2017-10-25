@@ -42,7 +42,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   const requestSource = (request.body.originalRequest) ? request.body.originalRequest.source : undefined;
   const app = new DialogflowApp({request: request, response: response});
 
-  const resolvedQuery = request.body;
+  const resolvedQuery = request.body.result.resolvedQuery;
 
   const userId = app.getUser().userId;
   console.log("UserId: " + userId);
@@ -230,9 +230,13 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     'input.My_opinion_is': () => {
       // Save the users opinion in Firebase
       console.log(resolvedQuery);
+      var ref_user = db.ref("users/" + userId + "/");
+      ref_user.set({
+        opinion: resolvedQuery
+      })
       //console.log("resolvedQuery: " + request.result.resolvedQuery);
       if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse("resolvedQuery: " + request.result.resolvedQuery);
+        sendGoogleResponse("Wow, that's interesting!");
       } else {
         sendResponse('summa'); // Send simple response to user
       }

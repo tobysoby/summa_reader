@@ -42,6 +42,8 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   const requestSource = (request.body.originalRequest) ? request.body.originalRequest.source : undefined;
   const app = new DialogflowApp({request: request, response: response});
 
+  const resolvedQuery = request.body.result.resolvedQuery;
+
   const userId = app.getUser().userId;
   console.log("UserId: " + userId);
 
@@ -52,7 +54,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     'input.welcome': () => {
       // Use the Actions on Google lib to respond to Google requests; for other requests use JSON
       if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse('Hello, Welcome to the summa reader!'); // Send simple response to user
+        sendGoogleResponse('Hello, Welcome to the opinion broker!'); // Send simple response to user
       } else {
         sendResponse('Hello, Welcome to the summa reader!'); // Send simple response to user
       }
@@ -84,9 +86,9 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         ref_storyline_summary.once("value", function(snapshot_summary) {
           console.log(snapshot_title.val() + snapshot_summary.val());
           let text_to_speech = '<speak>'
-          + '<p>' + snapshot_title.val() + '</p>'
-          + '<p>' + snapshot_summary.val() + '</p>'
-          + '<p>' + 'Do you have an opinion an that or do you need more details?' + '</p>'
+          + '<p>' + snapshot_title.val() + '. </p>'
+          + '<p>' + snapshot_summary.val() + '. </p>'
+          + '<p>' + 'Do you have an opinion an that or do you need more details? If you have an opinion, say ' + '</p>'
           + '</speak>'
           sendGoogleResponse(text_to_speech);
         });
@@ -222,6 +224,20 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
       });
       if (requestSource === googleAssistantRequest) {
         sendGoogleResponse(output);
+      } else {
+        sendResponse('summa'); // Send simple response to user
+      }
+    },
+    'input.My_opinion_is': () => {
+      // Save the users opinion in Firebase
+      console.log(resolvedQuery);
+      var ref_user = db.ref("users/" + userId + "/");
+      ref_user.set({
+        opinion: resolvedQuery
+      })
+      //console.log("resolvedQuery: " + request.result.resolvedQuery);
+      if (requestSource === googleAssistantRequest) {
+        sendGoogleResponse("Wow, that's interesting! Would you like to now, what you friends had to say about this topic?");
       } else {
         sendResponse('summa'); // Send simple response to user
       }

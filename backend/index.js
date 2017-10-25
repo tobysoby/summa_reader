@@ -40,12 +40,13 @@ AsyncRequests('https://dev3.summa.leta.lv/api/queries/all/stories', function(res
           AsyncRequests(url, function(values){    
             items.title= values.title.english,
             items.summary=  values.summary 
+
             var ref = db.ref("storylines");
-            for(var i=0; i<mediaObj.length; i++){
-              ref.set(
-                {i: meidaObj}
-              )
-            }
+            ref.set(
+              {0: mediaObj}
+            )
+            
+            
           })
           return items;
         })
@@ -54,31 +55,3 @@ AsyncRequests('https://dev3.summa.leta.lv/api/queries/all/stories', function(res
 
   })
 });
-
-
-
-// request('https://dev3.summa.leta.lv/api/queries/all/stories', { json: true }, (err, res, body) => {
-//   if (err) { return console.log(err); }
-//   
-//   var stories = TopFive.map(function(obj){
-//     
-    
-//     request(url, { json: true }, (err, res, body) => {
-//       var lists = {
-//         'title': body.title,
-//         'summary': body.summary,
-//         'artcles': body.mediaItems.map(function(obj){
-//           
-
-//           request(url, { json: true }, (err, res, body) => {
-//             if (err) { return console.log(err); }
-//             return body.title;
-//           });
-          
-//         })
-//       }
-//       console.log(lists);
-//     });
-      
-//   });
-// });

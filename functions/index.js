@@ -100,30 +100,31 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     'input.2-Yes': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("default_values/strings/2-Yes/");
-      var snapshot_val;
       ref.once("value", function(snapshot) {
-        snapshot_val = snapshot.val();
+        var snapshot_val = snapshot.val();
         console.log('input.2-Yes' + snapshot_val); 
+
+        if (requestSource === googleAssistantRequest) {
+          sendGoogleResponse(snapshot_val);
+        } else {
+          sendResponse(getDefaultText()); // Send simple response to user
+        }
+
       });
-      if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse(snapshot_val);
-      } else {
-        sendResponse(getDefaultText()); // Send simple response to user
-      }
+
     },
     'input.2-No': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("default_values/strings/2-No/");
-      var snapshot_val
       ref.once("input.2-No", function(snapshot) {
-        snapshot_val = snapshot.val();
+        var snapshot_val = snapshot.val();
         console.log('input.2-No' + snapshot_val); 
+        if (requestSource === googleAssistantRequest) {
+          sendGoogleResponse(snapshot_val);
+        } else {
+          sendResponse(getDefaultText()); // Send simple response to user
+        }
       });
-      if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse(snapshot_val);
-      } else {
-        sendResponse(getDefaultText()); // Send simple response to user
-      }
     },
     'input.2-More_details': () => {
 
@@ -269,6 +270,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     var ref = db.ref("default_values/strings/default-dontKnow/");
     ref.once("value", function(snapshot) {
         console.log(snapshot.val());
+        return snapshot.val();
       });
 
   }

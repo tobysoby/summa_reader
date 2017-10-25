@@ -118,7 +118,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     'input.2-No': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("default_values/strings/2-No/");
-      ref.once("input.2-No", function(snapshot) {
+      ref.once("value", function(snapshot) {
         var snapshot_val = snapshot.val();
         console.log('input.2-No' + snapshot_val); 
         if (requestSource === googleAssistantRequest) {

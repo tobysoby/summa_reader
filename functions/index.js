@@ -47,6 +47,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
   // Create handlers for Dialogflow actions as well as a 'default' handler
   const actionHandlers = {
+
     // The default welcome intent has been matched, welcome the user (https://dialogflow.com/docs/events#default_welcome_intent)
     'input.welcome': () => {
       // Use the Actions on Google lib to respond to Google requests; for other requests use JSON
@@ -99,39 +100,47 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     'input.2-Yes': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("default_values/strings/2-Yes/");
+      var snapshot_val;
       ref.once("value", function(snapshot) {
-        console.log('input.2-Yes' + snapshot.val());
+        snapshot_val = snapshot.val();
+        console.log('input.2-Yes' + snapshot_val); 
       });
       if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse('input.2-Yes');
+        sendGoogleResponse(snapshot_val);
       } else {
-        sendResponse('summa'); // Send simple response to user
+        sendResponse(getDefaultText()); // Send simple response to user
       }
     },
     'input.2-No': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("default_values/strings/2-No/");
-      ref.once("value", function(snapshot) {
-        console.log(snapshot.val());
+      var snapshot_val
+      ref.once("input.2-No", function(snapshot) {
+        snapshot_val = snapshot.val();
+        console.log('input.2-No' + snapshot_val); 
       });
       if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse(output);
+        sendGoogleResponse(snapshot_val);
       } else {
-        sendResponse('summa'); // Send simple response to user
+        sendResponse(getDefaultText()); // Send simple response to user
       }
     },
     'input.2-More_details': () => {
-      // Get the most interesting topic from firebase
-      var ref = db.ref("text");
-      ref.once("value", function(snapshot) {
-        console.log(snapshot.val());
+
+      var ref_storyline_article_title = db.ref("storylines_test/1/article/title");
+      var ref_storyline_article_text = db.ref("storylines_test/1/article/text");
+      ref_storyline_article_title.once("value", function(snapshot_title) {
+        ref_storyline_article_text.once("value", function(snapshot_text) {
+          console.log(snapshot_title.val() + snapshot_text.val());
+          let text_to_speech = '<speak>'
+          + '<p>' + snapshot_title.val() + '</p>'
+          + '<p>' + snapshot_text.val() + '</p>'
+          + '</speak>'
+          sendGoogleResponse(text_to_speech);
+        });
       });
-      if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse(output);
-      } else {
-        sendResponse('summa'); // Send simple response to user
-      }
     },
+
     'input.3-Yes': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("text");
@@ -255,6 +264,14 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
   // Run the proper handler function to handle the request from Dialogflow
   actionHandlers[action]();
+
+  function getDefaultText() {
+    var ref = db.ref("default_values/strings/default-dontKnow/");
+    ref.once("value", function(snapshot) {
+        console.log(snapshot.val());
+      });
+
+  }
 
   // Function to send correctly formatted Google Assistant responses to Dialogflow which are then sent to the user
   function sendGoogleResponse (responseToUser) {

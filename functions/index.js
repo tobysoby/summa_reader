@@ -236,7 +236,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
       })
       //console.log("resolvedQuery: " + request.result.resolvedQuery);
       if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse("Wow, that's interesting!");
+        sendGoogleResponse("Wow, that's interesting! Would you like to now, what you friends had to say about this topic?");
       } else {
         sendResponse('summa'); // Send simple response to user
       }

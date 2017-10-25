@@ -104,11 +104,11 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         var snapshot_val = snapshot.val();
         console.log('input.2-Yes' + snapshot_val); 
 
-      if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse(snapshot_val);
-      } else {
-        sendResponse(getDefaultText()); // Send simple response to user
-      }
+        if (requestSource === googleAssistantRequest) {
+          sendGoogleResponse(snapshot_val);
+        } else {
+          sendResponse(getDefaultText()); // Send simple response to user
+        }
 
       });
 
@@ -119,12 +119,12 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
       ref.once("input.2-No", function(snapshot) {
         var snapshot_val = snapshot.val();
         console.log('input.2-No' + snapshot_val); 
-      if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse(snapshot_val);
-      } else {
-        sendResponse(getDefaultText()); // Send simple response to user
-      }
-      })
+        if (requestSource === googleAssistantRequest) {
+          sendGoogleResponse(snapshot_val);
+        } else {
+          sendResponse(getDefaultText()); // Send simple response to user
+        }
+      });
     },
     'input.2-More_details': () => {
 

@@ -30,32 +30,28 @@ AsyncRequests('https://dev3.summa.leta.lv/api/queries/all/stories', function(res
   var TopFive = underscore.first(underscore.sortBy(results.stories, 'itemCount').reverse(), 5);
   var stories = TopFive.map(function(obj){
     var url = 'https://dev3.summa.leta.lv/api/stories/' + obj.id;
+    var mediaObj = {};
     var media = AsyncRequests(url, function(results){
-      var meidaObj = {
-        'title': results.title,
-        'summary': results.summary,
-        'newsItems': []
-      };
-
-      results.mediaItems.map(function(obj){
-        var url = 'https://dev3.summa.leta.lv/api/mediaItems/' + obj.id;
-        AsyncRequests(url, function(values){
-          
-          meidaObj.newsItems.push({
-            'title': values.title.english,
-            'summary': values.summary 
-          });
-
-          var ref = db.ref("storylines");
-          ref.set(
-            {Articles: meidaObj}
-          )
-        });
-      });
-
-      
-      
+        mediaObj.title= results.title,
+        mediaObj.summary= results.summary,
+        mediaObj.articles =  results.mediaItems.map(function(obj){
+          var url = 'https://dev3.summa.leta.lv/api/mediaItems/' + obj.id;
+          var items = {};
+          AsyncRequests(url, function(values){    
+            items.title= values.title.english,
+            items.summary=  values.summary 
+            var ref = db.ref("storylines");
+            for(var i=0; i<mediaObj.length; i++){
+              ref.set(
+                {i: meidaObj}
+              )
+            }
+          })
+          return items;
+        })
+         
     });
+
   })
 });
 

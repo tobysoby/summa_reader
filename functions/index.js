@@ -52,12 +52,19 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
     // The default welcome intent has been matched, welcome the user (https://dialogflow.com/docs/events#default_welcome_intent)
     'input.welcome': () => {
-      // Use the Actions on Google lib to respond to Google requests; for other requests use JSON
-      if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse('Hello, Welcome to the opinion broker!'); // Send simple response to user
-      } else {
-        sendResponse('Hello, Welcome to the summa reader!'); // Send simple response to user
-      }
+
+      var ref = db.ref("default_values/strings/default_welcome/");
+      ref.once("value", function(snapshot) {
+        var snapshot_val = snapshot.val();
+        console.log('default_welcome' + snapshot_val); 
+
+        // Use the Actions on Google lib to respond to Google requests; for other requests use JSON
+        if (requestSource === googleAssistantRequest) {
+          sendGoogleResponse(snapshot_val); // Send simple response to user
+        } else {
+          sendResponse('Uspii'); // Send simple response to user
+        }
+      });
     },
     // The default fallback intent has been matched, try to recover (https://dialogflow.com/docs/intents#fallback_intents)
     'input.unknown': () => {

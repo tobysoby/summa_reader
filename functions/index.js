@@ -168,17 +168,17 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
             }
         });
     },
-    'input.4-Yes': () => {
-      // Get the most interesting topic from firebase
-      var ref = db.ref("text");
+    'input.4-yes': () => {
+      // Get the opinion of your friend
+      var ref = db.ref("/users/test_friend/opinion/");
       ref.once("value", function(snapshot) {
         console.log(snapshot.val());
+        if (requestSource === googleAssistantRequest) {
+          sendGoogleResponse("Your friend test_friend had the following opinion: " + snapshot.val() + ". " + "We detect some slight difference in your opinions, maybe you should have a chat about that. Should we get you into a discussion with test_friend?");
+        } else {
+          sendResponse('summa'); // Send simple response to user
+        }
       });
-      if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse(output);
-      } else {
-        sendResponse('summa'); // Send simple response to user
-      }
     },
     'input.4-No': () => {
       // Get the most interesting topic from firebase

@@ -1,0 +1,60 @@
+graph LR
+A[Message aus dem Assistant]
+B[Benutzereingabe]
+D[Welcome to the Stammtisch... // message: strings.default_welcome]
+E[What's up today?]
+G[Turkey blablabla. Dou you have an opinion on that or do you need more input? // message: aus summa und fest hinterlegt aber noch ohne key]
+H[Yes]
+I[No]
+J[More details please!]
+K[Please share it with me // message: strings.2-Yes]
+L[My opinion is blubb]
+M[That's interesting. Would you like to know what your friends had to say about this?]
+N[Yes]
+O[No]
+P[Carsten said ... We detected a sligth difference. Do you want to chat with him about this?]
+Q[Would you like to hear the next topic?]
+R[Yes]
+S[No]
+T[Have a nice day, bye!]
+U[I have found three article for this topic, title one is ...]
+
+D --> E
+E -->|input.1 / input.1| G
+G --> H
+G --> I
+G --> J
+H -->|2 - yes / input.2-Yes| K
+K --> L
+L -->|My_opinion_is // input.My_opinion_is| M
+M --> N
+M --> O
+N -->|4 - yes // input.4-Yes| P
+I -->|2 - no // input.2-No| Q
+Q --> R
+Q --> S
+R --> G
+S --> T
+J -->|2-More_details // input.2-More_details| U
+U --> G
+
+style A fill:#f9f
+style B fill:#ccf
+style C fill:#F4FA58
+style D fill:#f9f
+style E fill:#ccf
+style G fill:#f9f
+style H fill:#ccf
+style I fill:#ccf
+style J fill:#ccf
+style K fill:#f9f
+style L fill:#ccf
+style M fill:#f9f
+style N fill:#ccf
+style O fill:#ccf
+style P fill: #f9f
+style Q fill: #f9f
+style R fill:#ccf
+style S fill:#ccf
+style T fill: #f9f
+style U fill: #f9f

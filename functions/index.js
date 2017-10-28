@@ -80,8 +80,8 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     // 1
     'input.whats_up_today': () => {
       // Get the most interesting topic from firebase
-      var ref_storyline_title = db.ref("storylines_test/1/title/");
-      var ref_storyline_summary = db.ref("storylines_test/1/summary/");
+      var ref_storyline_title = db.ref("storylines/0/title/");
+      var ref_storyline_summary = db.ref("storylines/0/summary/");
       ref_storyline_title.once("value", function(snapshot_title) {
         ref_storyline_summary.once("value", function(snapshot_summary) {
           console.log(snapshot_title.val() + snapshot_summary.val());

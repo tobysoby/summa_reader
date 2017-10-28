@@ -54,7 +54,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     'input.welcome': () => {
       // Use the Actions on Google lib to respond to Google requests; for other requests use JSON
       if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse('Hello, Welcome to the opinion broker!'); // Send simple response to user
+        sendGoogleResponse('Hello, Welcome to your own personal Stammtisch!'); // Send simple response to user
       } else {
         sendResponse('Hello, Welcome to the summa reader!'); // Send simple response to user
       }
@@ -78,16 +78,16 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
       }
     },
     // 1
-    'input.1': () => {
+    'input.whats_up_today': () => {
       // Get the most interesting topic from firebase
-      var ref_storyline_title = db.ref("storylines_test/1/title/");
-      var ref_storyline_summary = db.ref("storylines_test/1/summary/");
+      var ref_storyline_title = db.ref("storylines/0/title/");
+      var ref_storyline_summary = db.ref("storylines/0/summary/");
       ref_storyline_title.once("value", function(snapshot_title) {
         ref_storyline_summary.once("value", function(snapshot_summary) {
           console.log(snapshot_title.val() + snapshot_summary.val());
           let text_to_speech = '<speak>'
           + '<p>' + snapshot_title.val() + '. </p>'
-          + '<p>' + snapshot_summary.val() + '. </p>'
+          //+ '<p>' + snapshot_summary.val() + '. </p>'
           + '<p>' + 'Do you have an opinion an that or do you need more details? If you have an opinion, say ' + '</p>'
           + '</speak>'
           sendGoogleResponse(text_to_speech);
@@ -99,7 +99,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 //MY -----------------------------------------------------------
 
 
-    'input.2-Yes': () => {
+    'input.2_yes': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("default_values/strings/2-Yes/");
       ref.once("value", function(snapshot) {
@@ -115,7 +115,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
       });
 
     },
-    'input.2-No': () => {
+    'input.2_no': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("default_values/strings/2-No/");
       ref.once("value", function(snapshot) {
@@ -128,7 +128,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         }
       });
     },
-    'input.2-More_details': () => {
+    'input.more_details': () => {
 
       var ref_storyline_article_title = db.ref("storylines_test/1/article/title");
       var ref_storyline_article_text = db.ref("storylines_test/1/article/text");
@@ -144,7 +144,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
       });
     },
 
-    'input.3-Yes': () => {
+    'input.3_yes': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("text");
       ref.once("value", function(snapshot) {
@@ -156,7 +156,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         sendResponse('summa'); // Send simple response to user
       }
     },
-    'input.3-No': () => {
+    'input.3_no': () => {
         var ref = db.ref("default_values/strings/3-No/");
         ref.once("input.3-No", function(snapshot) {
             var snapshot_val = snapshot.val();
@@ -168,7 +168,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
             }
         });
     },
-    'input.4-yes': () => {
+    'input.4_yes': () => {
       // Get the opinion of your friend
       var ref = db.ref("/users/test_friend/opinion/");
       ref.once("value", function(snapshot) {
@@ -180,7 +180,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         }
       });
     },
-    'input.4-No': () => {
+    'input.4_no': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("text");
       ref.once("value", function(snapshot) {
@@ -192,7 +192,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         sendResponse('summa'); // Send simple response to user
       }
     },
-    'input.5-discuss': () => {
+    'input.discuss': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("text");
       ref.once("value", function(snapshot) {
@@ -204,7 +204,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         sendResponse('summa'); // Send simple response to user
       }
     },
-    'input.6-Yes': () => {
+    'input.6_yes': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("text");
       ref.once("value", function(snapshot) {
@@ -216,7 +216,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         sendResponse('summa'); // Send simple response to user
       }
     },
-    'input.6-No': () => {
+    'input.6_no': () => {
       // Get the most interesting topic from firebase
       var ref = db.ref("text");
       ref.once("value", function(snapshot) {
@@ -228,7 +228,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         sendResponse('summa'); // Send simple response to user
       }
     },
-    'input.My_opinion_is': () => {
+    'input.my_opinion_is': () => {
       // Save the users opinion in Firebase
       console.log(resolvedQuery);
       var ref_user = db.ref("users/" + userId + "/");

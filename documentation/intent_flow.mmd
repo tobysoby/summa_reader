@@ -20,22 +20,22 @@ T[Have a nice day, bye!]
 U[I have found three article for this topic, title one is ...]
 
 D --> E
-E -->|input.1 / input.1| G
+E -->|input.whats_up_today / input.whats_up_today| G
 G --> H
 G --> I
 G --> J
-H -->|2 - yes / input.2-Yes| K
+H -->|2_yes / input.2_yes| K
 K --> L
-L -->|My_opinion_is // input.My_opinion_is| M
+L -->|my_opinion_is // input.my_opinion_is| M
 M --> N
 M --> O
-N -->|4 - yes // input.4-Yes| P
-I -->|2 - no // input.2-No| Q
+N -->|4_yes // input.4_yes| P
+I -->|2_no // input.2_no| Q
 Q --> R
 Q --> S
 R --> G
 S --> T
-J -->|2-More_details // input.2-More_details| U
+J -->|more_details // input.more_details| U
 U --> G
 
 style A fill:#f9f

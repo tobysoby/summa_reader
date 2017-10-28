@@ -54,7 +54,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     'input.welcome': () => {
       // Use the Actions on Google lib to respond to Google requests; for other requests use JSON
       if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse('Hello, Welcome to the opinion broker!'); // Send simple response to user
+        sendGoogleResponse('Hello, Welcome to your own personal Stammtisch!'); // Send simple response to user
       } else {
         sendResponse('Hello, Welcome to the summa reader!'); // Send simple response to user
       }

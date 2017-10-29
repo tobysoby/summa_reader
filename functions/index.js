@@ -52,12 +52,15 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
     // The default welcome intent has been matched, welcome the user (https://dialogflow.com/docs/events#default_welcome_intent)
     'input.welcome': () => {
-      // Use the Actions on Google lib to respond to Google requests; for other requests use JSON
-      if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse('Hello, Welcome to your own personal Stammtisch!'); // Send simple response to user
-      } else {
-        sendResponse('Hello, Welcome to the summa reader!'); // Send simple response to user
-      }
+      var ref = db.ref("default_values/strings/default-welcome/");
+      ref.once("value", function(snapshot) {
+        var snapshot_val = snapshot.val();
+        if (requestSource === googleAssistantRequest) {
+          sendGoogleResponse(snapshot_val);
+        } else {
+          sendResponse(getDefaultText()); // Send simple response to user
+        }
+      });
     },
     // The default fallback intent has been matched, try to recover (https://dialogflow.com/docs/intents#fallback_intents)
     'input.unknown': () => {
@@ -82,15 +85,18 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
       // Get the most interesting topic from firebase
       var ref_storyline_title = db.ref("storylines/0/title/");
       var ref_storyline_summary = db.ref("storylines/0/summary/");
+      var ref_do_you_have_an_opinion = db.ref("default_values/strings/do_you_have_an_opinion/");
       ref_storyline_title.once("value", function(snapshot_title) {
         ref_storyline_summary.once("value", function(snapshot_summary) {
-          console.log(snapshot_title.val() + snapshot_summary.val());
-          let text_to_speech = '<speak>'
-          + '<p>' + snapshot_title.val() + '. </p>'
-          //+ '<p>' + snapshot_summary.val() + '. </p>'
-          + '<p>' + 'Do you have an opinion an that or do you need more details? If you have an opinion, say ' + '</p>'
-          + '</speak>'
-          sendGoogleResponse(text_to_speech);
+          ref_do_you_have_an_opinion.once("value", function(snapshot_do_you_have_an_opinion) {
+            console.log(snapshot_title.val() + snapshot_summary.val());
+            let text_to_speech = '<speak>'
+            + '<p>' + snapshot_title.val() + '. </p>'
+            //+ '<p>' + snapshot_summary.val() + '. </p>'
+            + '<p>' + snapshot_do_you_have_an_opinion.val() + '</p>'
+            + '</speak>'
+            sendGoogleResponse(text_to_speech);
+          });
         });
       });
     },
@@ -113,7 +119,6 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         }
 
       });
-
     },
     'input.2_no': () => {
       // Get the most interesting topic from firebase
@@ -235,12 +240,14 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
       ref_user.set({
         opinion: resolvedQuery
       })
-      //console.log("resolvedQuery: " + request.result.resolvedQuery);
-      if (requestSource === googleAssistantRequest) {
-        sendGoogleResponse("Wow, that's interesting! Would you like to now, what you friends had to say about this topic?");
-      } else {
-        sendResponse('summa'); // Send simple response to user
-      }
+      var ref_wow_thats_interesting = db.ref("default_values/strings/wow_thats_interesting/");
+      ref_wow_thats_interesting.once("value", function(snapshot_wow_thats_interesting) {
+        if (requestSource === googleAssistantRequest) {
+          sendGoogleResponse(snapshot_wow_thats_interesting.val());
+        } else {
+          sendResponse('summa'); // Send simple response to user
+        }
+      });
     },
 
 

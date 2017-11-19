@@ -100,6 +100,18 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         });
       });
     },
+    // if the user asks for help
+    'input.help': () => {
+      // Get the help string
+      var ref_help = db.ref("default_values/strings/help/");
+      ref_help.once("value", function(snapshot_help) {
+            console.log(snapshot_help.val());
+            let text_to_speech = '<speak>'
+            + '<p>' + snapshot_help.val() + '. </p>'
+            + '</speak>'
+            sendGoogleResponse(text_to_speech);
+      });
+    },
 
 
 //MY -----------------------------------------------------------

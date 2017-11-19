@@ -145,18 +145,22 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         }
       });
     },
+    // if a user wants more details, read the title again, followed by the summary
     'input.more_details': () => {
-
-      var ref_storyline_article_title = db.ref("storylines_test/1/article/title");
-      var ref_storyline_article_text = db.ref("storylines_test/1/article/text");
-      ref_storyline_article_title.once("value", function(snapshot_title) {
-        ref_storyline_article_text.once("value", function(snapshot_text) {
-          console.log(snapshot_title.val() + snapshot_text.val());
-          let text_to_speech = '<speak>'
-          + '<p>' + snapshot_title.val() + '</p>'
-          + '<p>' + snapshot_text.val() + '</p>'
-          + '</speak>'
-          sendGoogleResponse(text_to_speech);
+      var ref_storyline_title = db.ref("storylines/0/title");
+      var ref_storyline_summary = db.ref("storylines/0/summary");
+      var ref_opinion = db.ref("default_values/strings/more_details_opinion/");
+      ref_storyline_title.once("value", function(snapshot_title) {
+        ref_storyline_summary.once("value", function(snapshot_summary) {
+          ref_opinion.once("value", function(snapshot_opinion) {
+            console.log(snapshot_title.val() + snapshot_summary.val());
+            let text_to_speech = '<speak>'
+            + '<p>' + snapshot_title.val() + '</p>'
+            + '<p>' + snapshot_summary.val() + '</p>'
+            + '<p>' + snapshot_opinion.val() + '</p>'
+            + '</speak>'
+            sendGoogleResponse(text_to_speech);
+          });
         });
       });
     },
